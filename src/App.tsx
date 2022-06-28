@@ -1,5 +1,12 @@
+import AppProvider from './providers';
+import AppRoutes from './routes';
+
 const App: React.FC = () => {
-  return <h1>Hello World!</h1>;
+  return (
+    <AppProvider>
+      <AppRoutes />
+    </AppProvider>
+  );
 };
 
 export default App;
