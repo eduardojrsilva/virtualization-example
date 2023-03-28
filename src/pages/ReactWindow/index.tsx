@@ -25,8 +25,8 @@ function ReactWindow(): JSX.Element {
       <AutoSizer>
         {({ height, width }) => (
           <StyledList
-            height={height}
-            width={width}
+            height={height as number}
+            width={width as number}
             itemCount={10000}
             itemSize={45}
             overscanCount={5}
