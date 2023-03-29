@@ -84,13 +84,11 @@ function Virtualizer({
         ))}
       </VirtualizerContainer>
 
-      {!!displayingItems.length && (
-        <div>
-          <strong>Items em tela: </strong>
+      <div>
+        <strong>Items em tela: </strong>
 
-          <span>{displayingItems.map((itemIndex) => itemIndex + 1).join(', ')}</span>
-        </div>
-      )}
+        <span>{displayingItems.map((itemIndex) => itemIndex + 1).join(', ')}</span>
+      </div>
     </Container>
   );
 }
