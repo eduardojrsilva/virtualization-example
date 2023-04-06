@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Container, ItemContainer, VirtualizerContainer } from './styles';
 
@@ -7,6 +7,7 @@ interface VirtualizerProps {
   containerWidth: number;
   itemHeight: number;
   itemCount: number;
+  bufferSize?: number;
   gap?: number;
   children: (index: number) => JSX.Element;
 }
@@ -16,57 +17,52 @@ function Virtualizer({
   containerWidth,
   itemHeight,
   itemCount,
+  bufferSize = 0,
   gap = 0,
   children,
 }: VirtualizerProps): JSX.Element {
-  const [displayingItems, setDisplayingItems] = useState([]);
+  const [displayingItems, setDisplayingItems] = useState<number[]>([]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const containerRef = useRef<any>();
 
-  const items = Array.from(new Array(itemCount));
+  const itemWithGap = itemHeight + gap;
 
   const calculateItemTop = (index: number): number => {
     if (index === 0) return 0;
-
-    const itemWithGap = itemHeight + gap;
 
     const previousItemsHeight = itemWithGap * index;
 
     return previousItemsHeight;
   };
 
-  const itemTopPositions: Record<number, number> = items.reduce((acc, item, index) => {
-    const itemTop = calculateItemTop(index);
-
-    const positions = {
-      ...acc,
-      [index]: itemTop,
-    };
-
-    return positions;
-  }, {});
-
-  const handleScroll = useCallback(() => {
+  const handleScroll = (): void => {
     const { scrollTop } = containerRef.current;
-    const contentRenderedUntil = scrollTop + containerHeight;
 
-    const displaying = items.reduce((acc, _, index) => {
-      const itemTop = itemTopPositions[index];
+    const startItem = Math.floor(scrollTop / itemWithGap);
 
-      if (itemTop + itemHeight >= scrollTop && itemTop <= contentRenderedUntil) {
-        return [...acc, index];
-      }
+    const endItem = startItem + Math.ceil(containerHeight / itemWithGap);
 
-      return acc;
-    }, []);
+    const startBuffer = bufferSize > startItem ? startItem : startItem - bufferSize;
 
-    setDisplayingItems(displaying);
-  }, [containerHeight, itemHeight, itemTopPositions, items]);
+    const itemCountIndex = itemCount - 1;
+
+    const endBuffer = endItem + bufferSize > itemCountIndex ? itemCountIndex : endItem + bufferSize;
+    console.log(endItem, bufferSize, itemCountIndex);
+
+    console.log(
+      `startItem: ${startItem} - endItem: ${endItem} -  startBuffer: ${startBuffer} - endBuffer: ${endBuffer}`,
+    );
+
+    setDisplayingItems(
+      Array.from({ length: endBuffer - startBuffer }, (_, index) => index + startBuffer),
+    );
+  };
 
   useEffect(() => {
     handleScroll();
-  }, [handleScroll]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Container>
@@ -76,12 +72,18 @@ function Virtualizer({
         $width={containerWidth}
         onScroll={handleScroll}
       >
-        {items.map((_, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <ItemContainer key={`item-${index}`} $top={itemTopPositions[index]} $height={itemHeight}>
-            {children(index)}
-          </ItemContainer>
-        ))}
+        <div style={{ height: (itemHeight + gap) * itemCount }}>
+          {displayingItems.map((index) => (
+            <ItemContainer
+              // eslint-disable-next-line react/no-array-index-key
+              key={`item-${index}`}
+              $top={calculateItemTop(index)}
+              $height={itemHeight}
+            >
+              {children(index)}
+            </ItemContainer>
+          ))}
+        </div>
       </VirtualizerContainer>
 
       <div>

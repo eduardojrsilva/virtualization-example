@@ -10,9 +10,10 @@ function ManualImplementation(): JSX.Element {
     <Virtualizer
       containerHeight={200}
       containerWidth={200}
-      itemHeight={30}
-      itemCount={100}
+      itemHeight={35}
+      itemCount={100000}
       gap={10}
+      bufferSize={5}
     >
       {Row}
     </Virtualizer>
