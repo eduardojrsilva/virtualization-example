@@ -48,11 +48,6 @@ function Virtualizer({
     const itemCountIndex = itemCount - 1;
 
     const endBuffer = endItem + bufferSize > itemCountIndex ? itemCountIndex : endItem + bufferSize;
-    console.log(endItem, bufferSize, itemCountIndex);
-
-    console.log(
-      `startItem: ${startItem} - endItem: ${endItem} -  startBuffer: ${startBuffer} - endBuffer: ${endBuffer}`,
-    );
 
     setDisplayingItems(
       Array.from({ length: endBuffer - startBuffer }, (_, index) => index + startBuffer),
