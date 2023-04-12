@@ -41,7 +41,7 @@ function Virtualizer({
 
     const startItem = Math.floor(scrollTop / itemWithGap);
 
-    const endItem = startItem + Math.ceil(containerHeight / itemWithGap);
+    const endItem = startItem + Math.floor(containerHeight / itemWithGap);
 
     const startBuffer = bufferSize > startItem ? startItem : startItem - bufferSize;
 
@@ -50,7 +50,7 @@ function Virtualizer({
     const endBuffer = endItem + bufferSize > itemCountIndex ? itemCountIndex : endItem + bufferSize;
 
     setDisplayingItems(
-      Array.from({ length: endBuffer - startBuffer }, (_, index) => index + startBuffer),
+      Array.from({ length: endBuffer - startBuffer + 1 }, (_, index) => index + startBuffer),
     );
   };
 
