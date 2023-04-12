@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Container, ItemContainer, VirtualizerContainer } from './styles';
+import { Container, FullListContainer, ItemContainer, VirtualizerContainer } from './styles';
 
 interface VirtualizerProps {
   containerHeight: number;
@@ -67,7 +67,7 @@ function Virtualizer({
         $width={containerWidth}
         onScroll={handleScroll}
       >
-        <div style={{ height: (itemHeight + gap) * itemCount }}>
+        <FullListContainer $height={itemWithGap * itemCount}>
           {displayingItems.map((index) => (
             <ItemContainer
               // eslint-disable-next-line react/no-array-index-key
@@ -78,7 +78,7 @@ function Virtualizer({
               {children(index)}
             </ItemContainer>
           ))}
-        </div>
+        </FullListContainer>
       </VirtualizerContainer>
 
       <div>

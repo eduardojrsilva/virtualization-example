@@ -20,6 +20,14 @@ export const VirtualizerContainer = styled.div<VirtualizerContainerProps>`
   overflow: auto;
 `;
 
+interface FullListContainerProps {
+  $height: number;
+}
+
+export const FullListContainer = styled.div<FullListContainerProps>`
+  height: ${({ $height }) => $height}px;
+`;
+
 interface ItemProps {
   $top: number;
   $height: number;
