@@ -82,7 +82,7 @@ function Virtualizer({
       </VirtualizerContainer>
 
       <div>
-        <strong>Items em tela: </strong>
+        <strong>Items renderizados: </strong>
 
         <span>{displayingItems.map((itemIndex) => itemIndex + 1).join(', ')}</span>
       </div>
